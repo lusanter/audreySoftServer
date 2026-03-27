@@ -1,0 +1,24 @@
+spring:
+  application:
+    name: soft
+
+  #BASE DE DATOS
+  datasource:
+    url: jdbc:postgresql://localhost:5432/audrey
+    username: santer
+    password: "1234"
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+  flyway:
+    enabled: false
+
+#SEGURIDAD
+# IMPORTANTE: En producción, mover secret-key a una variable de entorno (JWT_SECRET_KEY)
+audrey:
+  security:
+    jwt:
+      secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
+      access-token-expiration: 3600000   # 1 hora en milisegundos
+      refresh-token-expiration: 604800000 # 7 días en milisegundos
