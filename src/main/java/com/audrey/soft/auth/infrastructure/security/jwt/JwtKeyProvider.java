@@ -7,10 +7,6 @@ import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
 
-/**
- * Componente único responsable de proporcionar la clave HMAC para firmar/verificar JWT.
- * Evita la duplicación del método getSignInKey() en JwtTokenAdapter y JwtAuthenticationFilter.
- */
 @Component
 public class JwtKeyProvider {
 

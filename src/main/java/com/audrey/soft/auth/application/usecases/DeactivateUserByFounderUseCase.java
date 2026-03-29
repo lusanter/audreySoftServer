@@ -6,11 +6,11 @@ import com.audrey.soft.auth.domain.ports.UserRepositoryPort;
 
 import java.util.UUID;
 
-public class DesactivateUserByFounderUseCase {
+public class DeactivateUserByFounderUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
 
-    public DesactivateUserByFounderUseCase(UserRepositoryPort userRepositoryPort) {
+    public DeactivateUserByFounderUseCase(UserRepositoryPort userRepositoryPort) {
         this.userRepositoryPort = userRepositoryPort;
     }
 

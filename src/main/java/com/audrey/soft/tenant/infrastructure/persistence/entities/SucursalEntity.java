@@ -1,4 +1,4 @@
-package com.audrey.soft.auth.infrastructure.persistence.entities;
+package com.audrey.soft.tenant.infrastructure.persistence.entities;
 
 import jakarta.persistence.*;
 import lombok.*;
@@ -9,36 +9,31 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "usuarios")
+@Table(name = "sucursales")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class UserEntity {
+public class SucursalEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
-    @Column(unique = true, nullable = false, length = 50)
-    private String username;
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(name = "empresa_id", nullable = false)
+    private EmpresaEntity empresa;
 
-    @Column(nullable = false)
-    private String password;
+    @Column(nullable = false, length = 150)
+    private String nombre;
 
-    @Column(unique = true, nullable = false, length = 100)
-    private String email;
-
-    @Column(name = "profile_picture_url")
-    private String profilePictureUrl;
+    @Column(length = 250)
+    private String direccion;
 
     @Column(nullable = false)
     @Builder.Default
     private boolean active = true;
-
-    @Column(name = "last_login")
-    private LocalDateTime lastLogin;
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)

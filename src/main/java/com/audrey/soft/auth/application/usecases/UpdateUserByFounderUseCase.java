@@ -2,7 +2,6 @@ package com.audrey.soft.auth.application.usecases;
 
 import com.audrey.soft.auth.application.dtos.UserDTO;
 import com.audrey.soft.auth.domain.exceptions.UserNotFoundException;
-import com.audrey.soft.auth.domain.models.Role;
 import com.audrey.soft.auth.domain.models.User;
 import com.audrey.soft.auth.domain.ports.PasswordEncoderPort;
 import com.audrey.soft.auth.domain.ports.UserRepositoryPort;
@@ -26,8 +25,6 @@ public class UpdateUserByFounderUseCase {
 
         user.setUsername(userDTO.username());
         user.setEmail(userDTO.email());
-        user.setRole(Role.valueOf(userDTO.role().toUpperCase()));
-        user.setRestauranteId(userDTO.restauranteId());
 
         if (userDTO.active()) {
             user.activate();

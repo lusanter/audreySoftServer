@@ -1,7 +1,8 @@
 package com.audrey.soft.shared;
 
 import com.audrey.soft.auth.domain.exceptions.InvalidCredentialsException;
-import com.audrey.soft.auth.domain.exceptions.NoUserDBExeption;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.access.AccessDeniedException;
 import com.audrey.soft.auth.domain.exceptions.UserNotFoundException;
 import com.audrey.soft.auth.domain.exceptions.UserNotActiveException;
 import com.audrey.soft.auth.domain.exceptions.UsernameAlreadyExistsException;
@@ -26,6 +27,17 @@ public class GlobalExceptionHandler {
         return buildResponse(HttpStatus.FORBIDDEN, "Forbidden", ex.getMessage());
     }
 
+    // Falla el Token, está expirado, o no enviaron ninguno
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAuthenticationException(AuthenticationException ex) {
+        return buildResponse(HttpStatus.UNAUTHORIZED, "Unauthorized", "No estás autenticado, envía un token válido en el header Authorization.");
+    }
+
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAccessDenied(AccessDeniedException ex) {
+        return buildResponse(HttpStatus.FORBIDDEN, "Forbidden", "Acceso denegado: Tus permisos actuales no te permiten realizar esta acción en tu sucursal o empresa.");
+    }
+
     @ExceptionHandler(UserNotFoundException.class)
     public ResponseEntity<ErrorResponseDTO> handleUserNotFound(UserNotFoundException ex) {
         return buildResponse(HttpStatus.NOT_FOUND, "Not Found", ex.getMessage());
@@ -34,11 +46,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(UsernameAlreadyExistsException.class)
     public ResponseEntity<ErrorResponseDTO> handleUsernameAlreadyExists(UsernameAlreadyExistsException ex) {
         return buildResponse(HttpStatus.CONFLICT, "Conflict", ex.getMessage());
-    }
-
-    @ExceptionHandler(NoUserDBExeption.class)
-    public ResponseEntity<ErrorResponseDTO> handleNoUserDB(NoUserDBExeption ex) {
-        return buildResponse(HttpStatus.INTERNAL_SERVER_ERROR, "Internal Server Error", ex.getMessage());
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
@@ -60,7 +67,6 @@ public class GlobalExceptionHandler {
 
     private ResponseEntity<ErrorResponseDTO> buildResponse(HttpStatus status, String error, String message) {
         return ResponseEntity.status(status).body(
-                new ErrorResponseDTO(status.value(), error, message, LocalDateTime.now())
-        );
+                new ErrorResponseDTO(status.value(), error, message, LocalDateTime.now()));
     }
 }
