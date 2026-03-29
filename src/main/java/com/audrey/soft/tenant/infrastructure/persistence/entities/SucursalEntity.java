@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import com.audrey.soft.tenant.domain.models.VerticalType;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -30,6 +31,11 @@ public class SucursalEntity {
 
     @Column(length = 250)
     private String direccion;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "vertical_type", nullable = false)
+    @Builder.Default
+    private VerticalType vertical = VerticalType.RETAIL;
 
     @Column(nullable = false)
     @Builder.Default

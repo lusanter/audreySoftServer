@@ -3,6 +3,7 @@ package com.audrey.soft.tenant.infrastructure.web;
 import com.audrey.soft.tenant.app.dtos.EmpresaDTO;
 import com.audrey.soft.tenant.app.dtos.SucursalDTO;
 import com.audrey.soft.tenant.app.usecases.CreateEnterpriseUseCase;
+import com.audrey.soft.tenant.app.usecases.UpdateEnterpriseUseCase;
 import com.audrey.soft.tenant.app.usecases.CreateBranchUseCase;
 import com.audrey.soft.tenant.app.usecases.ListEnterprisesUseCase;
 import com.audrey.soft.tenant.app.usecases.ListBranchesUseCase;
@@ -19,15 +20,18 @@ import java.util.UUID;
 public class EmpresaController {
 
     private final CreateEnterpriseUseCase createEnterpriseUseCase;
+    private final UpdateEnterpriseUseCase updateEnterpriseUseCase;
     private final ListEnterprisesUseCase listEnterprisesUseCase;
     private final CreateBranchUseCase createBranchUseCase;
     private final ListBranchesUseCase listBranchesUseCase;
 
     public EmpresaController(CreateEnterpriseUseCase createEnterpriseUseCase,
+                             UpdateEnterpriseUseCase updateEnterpriseUseCase,
                              ListEnterprisesUseCase listEnterprisesUseCase,
                              CreateBranchUseCase createBranchUseCase,
                              ListBranchesUseCase listBranchesUseCase) {
         this.createEnterpriseUseCase = createEnterpriseUseCase;
+        this.updateEnterpriseUseCase = updateEnterpriseUseCase;
         this.listEnterprisesUseCase = listEnterprisesUseCase;
         this.createBranchUseCase = createBranchUseCase;
         this.listBranchesUseCase = listBranchesUseCase;
@@ -40,6 +44,14 @@ public class EmpresaController {
     @PreAuthorize("hasRole('SUPER_ADMIN')")
     public ResponseEntity<EmpresaDTO> crearEmpresa(@RequestBody EmpresaDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(createEnterpriseUseCase.execute(request));
+    }
+
+    /** Solo SUPER_ADMIN puede alterar contratos B2B de clientes */
+    @PutMapping("/update/{empresaId}")
+    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    public ResponseEntity<EmpresaDTO> actualizarEmpresa(@PathVariable java.util.UUID empresaId, 
+                                                        @RequestBody EmpresaDTO request) {
+        return ResponseEntity.ok(updateEnterpriseUseCase.execute(empresaId, request));
     }
 
     /** SUPER_ADMIN puede listar todas las empresas */

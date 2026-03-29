@@ -5,6 +5,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -26,6 +27,8 @@ public class EmpresaEntity {
 
     @Column(unique = true, nullable = false, length = 20)
     private String ruc;
+
+
 
     @Column(nullable = false)
     @Builder.Default

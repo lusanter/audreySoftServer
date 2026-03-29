@@ -31,6 +31,8 @@ public class Empresa {
     public String getRuc() { return ruc; }
     public void setRuc(String ruc) { this.ruc = ruc; }
 
+
+
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
 

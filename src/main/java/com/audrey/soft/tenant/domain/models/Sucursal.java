@@ -2,6 +2,7 @@ package com.audrey.soft.tenant.domain.models;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
+import com.audrey.soft.tenant.domain.models.VerticalType;
 
 public class Sucursal {
 
@@ -9,16 +10,18 @@ public class Sucursal {
     private UUID empresaId;
     private String nombre;
     private String direccion;
+    private VerticalType vertical;
     private boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Sucursal(UUID id, UUID empresaId, String nombre, String direccion,
+    public Sucursal(UUID id, UUID empresaId, String nombre, String direccion, VerticalType vertical,
                     boolean active, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.empresaId = empresaId;
         this.nombre = nombre;
         this.direccion = direccion;
+        this.vertical = vertical;
         this.active = active;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
@@ -35,6 +38,9 @@ public class Sucursal {
 
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
+
+    public VerticalType getVertical() { return vertical; }
+    public void setVertical(VerticalType vertical) { this.vertical = vertical; }
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }

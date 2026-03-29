@@ -58,7 +58,7 @@ public class DatabaseSeeder implements CommandLineRunner {
                     true
             );
             roleAssignmentRepository.save(godMode);
-            
+
         } else {
             System.out.println("🌱 [SEEDER] El fundador ya existe. No es necesario poblar.");
         }
