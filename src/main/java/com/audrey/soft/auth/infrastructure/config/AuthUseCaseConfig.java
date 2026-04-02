@@ -2,6 +2,7 @@ package com.audrey.soft.auth.infrastructure.config;
 
 import com.audrey.soft.auth.application.mappers.UserMapper;
 import com.audrey.soft.auth.application.ports.out.TokenGeneratorPort;
+import com.audrey.soft.auth.application.ports.out.TokenValidatorPort;
 import com.audrey.soft.auth.application.usecases.*;
 import com.audrey.soft.auth.domain.ports.RoleAssignmentRepositoryPort;
 import com.audrey.soft.auth.domain.ports.PasswordEncoderPort;
@@ -60,4 +61,33 @@ public class AuthUseCaseConfig {
             UserRepositoryPort userRepository) {
         return new DeactivateUserByFounderUseCase(userRepository);
     }
+
+    @Bean
+    public ListUserUseCase listUserUseCase(
+            UserRepositoryPort userRepositoryPort,
+            UserMapper userMapper) {
+        return new ListUserUseCase(userRepositoryPort, userMapper);
+    }
+
+    @Bean
+    public RefreshTokenUseCase refreshTokenUseCase(
+            TokenValidatorPort tokenValidator,
+            TokenGeneratorPort tokenGenerator,
+            UserRepositoryPort userRepository,
+            RoleAssignmentRepositoryPort roleAssignmentRepository) {
+        return new RefreshTokenUseCase(tokenValidator, tokenGenerator, userRepository, roleAssignmentRepository);
+    }
+
+    @Bean
+    public ListUserAssignmentsUseCase listUserAssignmentsUseCase(
+            RoleAssignmentRepositoryPort roleAssignmentRepository) {
+        return new ListUserAssignmentsUseCase(roleAssignmentRepository);
+    }
+
+    @Bean
+    public RevokeRoleUseCase revokeRoleUseCase(
+            RoleAssignmentRepositoryPort roleAssignmentRepository) {
+        return new RevokeRoleUseCase(roleAssignmentRepository);
+    }
+
 }

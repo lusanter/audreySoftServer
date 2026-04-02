@@ -44,7 +44,8 @@ public class DatabaseSeeder implements CommandLineRunner {
                     true,
                     null,
                     null,
-                    null
+                    null,
+                    "75914533"
             );
             founder = userRepository.save(founder);
 

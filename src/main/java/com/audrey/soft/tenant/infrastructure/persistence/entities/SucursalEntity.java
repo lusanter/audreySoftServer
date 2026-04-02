@@ -26,6 +26,7 @@ public class SucursalEntity {
     @JoinColumn(name = "empresa_id", nullable = false)
     private EmpresaEntity empresa;
 
+
     @Column(nullable = false, length = 150)
     private String nombre;
 

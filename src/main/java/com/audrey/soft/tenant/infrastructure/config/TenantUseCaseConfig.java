@@ -2,10 +2,11 @@ package com.audrey.soft.tenant.infrastructure.config;
 
 import com.audrey.soft.tenant.app.mappers.EmpresaMapper;
 import com.audrey.soft.tenant.app.mappers.SucursalMapper;
-import com.audrey.soft.tenant.app.usecases.CreateEnterpriseUseCase;
-import com.audrey.soft.tenant.app.usecases.CreateBranchUseCase;
-import com.audrey.soft.tenant.app.usecases.ListEnterprisesUseCase;
-import com.audrey.soft.tenant.app.usecases.ListBranchesUseCase;
+import com.audrey.soft.tenant.app.usecases.Empresa.CreateEnterpriseUseCase;
+import com.audrey.soft.tenant.app.usecases.Sucursal.CreateBranchUseCase;
+import com.audrey.soft.tenant.app.usecases.Empresa.ListEnterprisesUseCase;
+import com.audrey.soft.tenant.app.usecases.Sucursal.ListBranchesUseCase;
+import com.audrey.soft.tenant.app.usecases.Sucursal.UpdateBranchUseCase;
 import com.audrey.soft.tenant.domain.ports.EmpresaRepositoryPort;
 import com.audrey.soft.tenant.domain.ports.SucursalRepositoryPort;
 import org.springframework.context.annotation.Bean;
@@ -37,5 +38,10 @@ public class TenantUseCaseConfig {
     public ListBranchesUseCase listBranchesUseCase(SucursalRepositoryPort sucursalRepository,
                                                            SucursalMapper sucursalMapper) {
         return new ListBranchesUseCase(sucursalRepository, sucursalMapper);
+    }
+
+    @Bean
+    public UpdateBranchUseCase updateBranchUseCase(SucursalRepositoryPort sucursalRepositoryPort, SucursalMapper sucursalMapper){
+        return new UpdateBranchUseCase(sucursalRepositoryPort, sucursalMapper);
     }
 }

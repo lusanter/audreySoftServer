@@ -1,9 +1,8 @@
 package com.audrey.soft.auth.infrastructure.web;
 
-import com.audrey.soft.auth.application.dtos.AuthResponseDTO;
-import com.audrey.soft.auth.application.dtos.ContextSelectionRequestDTO;
-import com.audrey.soft.auth.application.dtos.LoginRequestDTO;
+import com.audrey.soft.auth.application.dtos.*;
 import com.audrey.soft.auth.application.usecases.LoginUseCase;
+import com.audrey.soft.auth.application.usecases.RefreshTokenUseCase;
 import com.audrey.soft.auth.application.usecases.SelectContextUseCase;
 import com.audrey.soft.auth.infrastructure.security.AudreyAuthPrincipal;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +16,14 @@ public class AuthController {
 
     private final LoginUseCase loginUseCase;
     private final SelectContextUseCase selectContextUseCase;
+    private final RefreshTokenUseCase refreshTokenUseCase;
 
-    public AuthController(LoginUseCase loginUseCase, SelectContextUseCase selectContextUseCase) {
+    public AuthController(LoginUseCase loginUseCase,
+                          SelectContextUseCase selectContextUseCase,
+                          RefreshTokenUseCase refreshTokenUseCase) {
         this.loginUseCase = loginUseCase;
         this.selectContextUseCase = selectContextUseCase;
+        this.refreshTokenUseCase = refreshTokenUseCase;
     }
 
     /**
@@ -44,5 +47,14 @@ public class AuthController {
             @RequestBody ContextSelectionRequestDTO request) {
         
         return ResponseEntity.ok(selectContextUseCase.execute(principal.username(), request));
+    }
+
+    /**
+     * Paso 3 (automático): Renovar el access token usando el refresh token.
+     * El cliente lo invoca cuando recibe un 401 en cualquier request protegida.
+     */
+    @PostMapping("/refresh")
+    public ResponseEntity<RefreshTokenResponseDTO> refresh(@RequestBody RefreshTokenRequestDTO request) {
+        return ResponseEntity.ok(refreshTokenUseCase.execute(request));
     }
 }

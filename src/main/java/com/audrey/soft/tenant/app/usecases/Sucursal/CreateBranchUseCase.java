@@ -1,4 +1,4 @@
-package com.audrey.soft.tenant.app.usecases;
+package com.audrey.soft.tenant.app.usecases.Sucursal;
 
 import com.audrey.soft.tenant.app.dtos.SucursalDTO;
 import com.audrey.soft.tenant.app.mappers.SucursalMapper;

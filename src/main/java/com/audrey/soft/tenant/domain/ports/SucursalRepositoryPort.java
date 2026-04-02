@@ -11,4 +11,5 @@ public interface SucursalRepositoryPort {
     Optional<Sucursal> findById(UUID id);
     List<Sucursal> findByEmpresaId(UUID empresaId);
     boolean existsByNombreAndEmpresaId(String nombre, UUID empresaId);
+    List<Sucursal> getAll();
 }

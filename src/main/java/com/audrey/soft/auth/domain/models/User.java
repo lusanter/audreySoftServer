@@ -3,13 +3,10 @@ package com.audrey.soft.auth.domain.models;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
-/**
- * Identidad pura del sistema. Solamente guarda los datos de la cuenta personal,
- * aislando la lógica de permisos y empresas a la tabla UserRoleAssignment.
- */
 public class User {
 
     private UUID id;
+    private String document;
     private String username;
     private String password;
     private String email;
@@ -22,7 +19,7 @@ public class User {
     private LocalDateTime updatedAt;
 
     public User(UUID id, String username, String password, String email, String profilePictureUrl,
-                boolean active, LocalDateTime lastLogin, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                boolean active, LocalDateTime lastLogin, LocalDateTime createdAt, LocalDateTime updatedAt, String document) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -32,6 +29,7 @@ public class User {
         this.lastLogin = lastLogin;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.document = document;
     }
 
     public void desactivate() { this.active = false; }
@@ -64,4 +62,12 @@ public class User {
 
     public LocalDateTime getUpdatedAt() { return updatedAt; }
     public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
+
+    public String getDocument() {
+        return document;
+    }
+
+    public void setDocument(String document) {
+        this.document = document;
+    }
 }

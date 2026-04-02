@@ -28,8 +28,6 @@ public class EmpresaEntity {
     @Column(unique = true, nullable = false, length = 20)
     private String ruc;
 
-
-
     @Column(nullable = false)
     @Builder.Default
     private boolean active = true;

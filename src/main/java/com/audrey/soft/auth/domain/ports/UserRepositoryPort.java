@@ -2,6 +2,7 @@ package com.audrey.soft.auth.domain.ports;
 
 import com.audrey.soft.auth.domain.models.User;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -10,4 +11,5 @@ public interface UserRepositoryPort {
     User save(User user);
     boolean existsByUsername(String username);
     Optional<User> findById(UUID id);
+    List<User> getAll();
 }

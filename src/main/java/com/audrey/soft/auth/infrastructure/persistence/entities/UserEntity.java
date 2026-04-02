@@ -21,6 +21,9 @@ public class UserEntity {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
 
+    @Column(unique = true, nullable = false, length = 20)
+    private String document;
+
     @Column(unique = true, nullable = false, length = 50)
     private String username;
 

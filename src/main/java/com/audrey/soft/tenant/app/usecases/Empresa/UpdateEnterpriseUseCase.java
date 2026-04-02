@@ -1,4 +1,4 @@
-package com.audrey.soft.tenant.app.usecases;
+package com.audrey.soft.tenant.app.usecases.Empresa;
 
 import com.audrey.soft.tenant.app.dtos.EmpresaDTO;
 import com.audrey.soft.tenant.domain.models.Empresa;

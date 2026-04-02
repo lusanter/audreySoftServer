@@ -2,11 +2,11 @@ package com.audrey.soft.tenant.infrastructure.web;
 
 import com.audrey.soft.tenant.app.dtos.EmpresaDTO;
 import com.audrey.soft.tenant.app.dtos.SucursalDTO;
-import com.audrey.soft.tenant.app.usecases.CreateEnterpriseUseCase;
-import com.audrey.soft.tenant.app.usecases.UpdateEnterpriseUseCase;
-import com.audrey.soft.tenant.app.usecases.CreateBranchUseCase;
-import com.audrey.soft.tenant.app.usecases.ListEnterprisesUseCase;
-import com.audrey.soft.tenant.app.usecases.ListBranchesUseCase;
+import com.audrey.soft.tenant.app.usecases.Empresa.CreateEnterpriseUseCase;
+import com.audrey.soft.tenant.app.usecases.Empresa.UpdateEnterpriseUseCase;
+import com.audrey.soft.tenant.app.usecases.Sucursal.CreateBranchUseCase;
+import com.audrey.soft.tenant.app.usecases.Empresa.ListEnterprisesUseCase;
+import com.audrey.soft.tenant.app.usecases.Sucursal.ListBranchesUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -75,7 +75,16 @@ public class EmpresaController {
     /** SUPER_ADMIN y ADMIN pueden listar sucursales */
     @GetMapping("list/branch/{empresaId}")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
-    public ResponseEntity<List<SucursalDTO>> listarSucursales(@PathVariable UUID empresaId) {
-        return ResponseEntity.ok(listBranchesUseCase.execute(empresaId));
+    public ResponseEntity<List<SucursalDTO>> listarSucursalByEmpresa(@PathVariable UUID empresaId) {
+        return ResponseEntity.ok(listBranchesUseCase.executeById(empresaId));
     }
+
+    @GetMapping("list/branch")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
+    public ResponseEntity<List<SucursalDTO>> listarSucursales() {
+        return ResponseEntity.ok(listBranchesUseCase.execute());
+    }
+
+
+
 }

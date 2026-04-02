@@ -36,7 +36,8 @@ public class CreateUserByFounderUseCase {
                 true,
                 null,
                 null,
-                null);
+                null,
+                request.document());
 
         User savedUser = userRepository.save(newUser);
         return userMapper.toDto(savedUser);

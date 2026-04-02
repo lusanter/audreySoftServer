@@ -10,5 +10,7 @@ public record UserDTO(
         String password,
         String email,
         String profilePictureUrl,
-        LocalDateTime lastLogin
-) {}
+        LocalDateTime lastLogin,
+        String document
+) {
+}

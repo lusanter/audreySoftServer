@@ -7,6 +7,7 @@ import com.audrey.soft.auth.domain.models.UserRoleAssignment;
 import com.audrey.soft.auth.domain.ports.RoleAssignmentRepositoryPort;
 import com.audrey.soft.auth.domain.ports.UserRepositoryPort;
 
+import java.util.List;
 import java.util.UUID;
 
 public class AssignRoleUseCase {
@@ -34,6 +35,18 @@ public class AssignRoleUseCase {
         if ((roleType == RoleType.CAJERO || roleType == RoleType.MOZO || roleType == RoleType.COCINERO)
                 && scopeType != ScopeType.SUCURSAL) {
             throw new IllegalArgumentException("Roles operativos solo pueden ser asignados a nivel SUCURSAL.");
+        }
+
+        // Validar que no exista ya una asignación activa con el mismo rol/scope/scopeId
+        List<UserRoleAssignment> existentes = roleAssignmentRepository.findActiveByUserId(userId);
+        boolean duplicado = existentes.stream().anyMatch(a ->
+                a.getRoleType() == roleType &&
+                a.getScopeType() == scopeType &&
+                (scopeId == null ? a.getScopeId() == null : scopeId.equals(a.getScopeId()))
+        );
+
+        if (duplicado) {
+            throw new IllegalArgumentException("El usuario ya tiene este rol asignado en este contexto.");
         }
 
         // Crear la asignación

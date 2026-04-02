@@ -10,6 +10,7 @@ import com.audrey.soft.tenant.infrastructure.persistence.repositories.SpringData
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -58,5 +59,10 @@ public class SucursalRepositoryAdapter implements SucursalRepositoryPort {
     @Override
     public boolean existsByNombreAndEmpresaId(String nombre, UUID empresaId) {
         return sucursalJpa.existsByNombreAndEmpresaId(nombre, empresaId);
+    }
+
+    @Override
+    public List<Sucursal> getAll() {
+        return sucursalJpa.findAll().stream().filter(Objects::nonNull).map(mapper::toDomain).toList();
     }
 }
