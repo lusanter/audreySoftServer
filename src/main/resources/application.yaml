@@ -10,15 +10,19 @@ spring:
   jpa:
     show-sql: true
     hibernate:
-      ddl-auto: create-drop
-  flyway:
-    enabled: false
+      ddl-auto: none  # Liquibase gestiona el esquema
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+    enabled: true
 
 #SEGURIDAD
-# IMPORTANTE: En producción, mover secret-key a una variable de entorno (JWT_SECRET_KEY)
 audrey:
   security:
     jwt:
       secret-key: 404E635266556A586E3272357538782F413F4428472B4B6250645367566B5970
-      access-token-expiration: 3600000   # 1 hora en milisegundos
-      refresh-token-expiration: 604800000 # 7 días en milisegundos
+      access-token-expiration: 3600000   # 1 hora
+      refresh-token-expiration: 604800000 # 7 días
+
+logging:
+  level:
+    liquibase: INFO

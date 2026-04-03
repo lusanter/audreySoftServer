@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 
 @Entity
-@Table(name = "sucursales")
+@Table(name = "sucursales", schema = "core")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -34,7 +34,7 @@ public class SucursalEntity {
     private String direccion;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "vertical_type", nullable = false)
+    @Column(name = "vertical_type", nullable = false, length = 50)
     @Builder.Default
     private VerticalType vertical = VerticalType.RETAIL;
 

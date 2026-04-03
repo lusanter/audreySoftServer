@@ -11,8 +11,8 @@ import java.util.UUID;
 
 @Entity
 @Table(
-    name = "user_role_assignments",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "role_type", "scope_type", "scope_id"})
+    name = "user_role_assignments", schema = "core",
+    uniqueConstraints = @UniqueConstraint(name = "uq_user_role_scope", columnNames = {"user_id", "role_type", "scope_type", "scope_id"})
 )
 @Getter
 @Setter
@@ -39,7 +39,7 @@ public class UserRoleAssignmentEntity {
     private ScopeType scopeType;
 
     // El ID de la Empresa o Sucursal (NULL si ScopeType es PLATAFORMA)
-    @Column(name = "scope_id", nullable = true)
+    @Column(name = "scope_id")
     private UUID scopeId;
 
     @Column(nullable = false)

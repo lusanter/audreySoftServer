@@ -1,0 +1,19 @@
+databaseChangeLog:
+  - include:
+      file: changes/01-crear-esquemas.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/02-crear-tablas-empresas.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/03-crear-tablas-sucursales.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/04-crear-tablas-auth.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/05-crear-indices.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/06-seed-datos-iniciales.sql
+      relativeToChangelogFile: true
