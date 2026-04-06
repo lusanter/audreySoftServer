@@ -15,7 +15,5 @@ public record SucursalDTO(
     public SucursalDTO {
         if (nombre == null || nombre.isBlank())
             throw new IllegalArgumentException("El nombre de la sucursal no puede estar vacío");
-        if (vertical == null)
-            throw new IllegalArgumentException("El tipo vertical de negocio en la Sucursal es obligatorio");
     }
 }

@@ -57,9 +57,9 @@ public class AuthUseCaseConfig {
     }
 
     @Bean
-    public DeactivateUserByFounderUseCase deactivateUserByFounderUseCase(
+    public ToggleUserStatusUseCase toggleUserStatusUseCase(
             UserRepositoryPort userRepository) {
-        return new DeactivateUserByFounderUseCase(userRepository);
+        return new ToggleUserStatusUseCase(userRepository);
     }
 
     @Bean

@@ -6,18 +6,19 @@ import com.audrey.soft.auth.domain.ports.UserRepositoryPort;
 
 import java.util.UUID;
 
-public class DeactivateUserByFounderUseCase {
+public class ToggleUserStatusUseCase {
 
     private final UserRepositoryPort userRepositoryPort;
 
-    public DeactivateUserByFounderUseCase(UserRepositoryPort userRepositoryPort) {
+    public ToggleUserStatusUseCase(UserRepositoryPort userRepositoryPort) {
         this.userRepositoryPort = userRepositoryPort;
     }
 
-    public void execute(UUID userId) {
+    public void execute(UUID userId, boolean activate) {
         User user = userRepositoryPort.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
-        user.desactivate();
+        if (activate) user.activate();
+        else user.desactivate();
         userRepositoryPort.save(user);
     }
 }

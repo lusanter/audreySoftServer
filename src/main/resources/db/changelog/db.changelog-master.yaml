@@ -17,3 +17,39 @@ databaseChangeLog:
   - include:
       file: changes/06-seed-datos-iniciales.sql
       relativeToChangelogFile: true
+  - include:
+      file: changes/07-crear-esquemas-modulos.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/08-crear-tablas-inventory.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/09-crear-tablas-restaurant.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/10-crear-tablas-billing.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/11-seed-metodos-cobro.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/12-alter-comanda-subcuentas.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/13-alter-mesas-add-zona.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/14-inventory-kpi-view.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/15-inventory-ajustes-tables.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/16-inventory-update-kpi-view-with-mermas.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/17-backfill-ajustes-motivos.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/18-seed-demo-inventory.sql
+      relativeToChangelogFile: true

@@ -4,6 +4,7 @@ import com.audrey.soft.auth.application.dtos.AssignRoleRequestDTO;
 import com.audrey.soft.auth.application.dtos.RoleAssignmentDTO;
 import com.audrey.soft.auth.application.dtos.UserDTO;
 import com.audrey.soft.auth.application.usecases.*;
+import com.audrey.soft.auth.application.usecases.ToggleUserStatusUseCase;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +18,7 @@ public class FounderController {
 
     private final CreateUserByFounderUseCase createUserUseCase;
     private final UpdateUserByFounderUseCase updateUserUseCase;
-    private final DeactivateUserByFounderUseCase deactivateUserUseCase;
+    private final ToggleUserStatusUseCase toggleUserStatusUseCase;
     private final ListUserUseCase listUserUseCase;
     private final AssignRoleUseCase assignRoleUseCase;
     private final ListUserAssignmentsUseCase listUserAssignmentsUseCase;
@@ -25,14 +26,14 @@ public class FounderController {
 
     public FounderController(CreateUserByFounderUseCase createUserUseCase,
                              UpdateUserByFounderUseCase updateUserUseCase,
-                             DeactivateUserByFounderUseCase desactivateUserUseCase,
+                             ToggleUserStatusUseCase toggleUserStatusUseCase,
                              ListUserUseCase listUserUseCase,
                              AssignRoleUseCase assignRoleUseCase,
                              ListUserAssignmentsUseCase listUserAssignmentsUseCase,
                              RevokeRoleUseCase revokeRoleUseCase) {
         this.createUserUseCase = createUserUseCase;
         this.updateUserUseCase = updateUserUseCase;
-        this.deactivateUserUseCase = desactivateUserUseCase;
+        this.toggleUserStatusUseCase = toggleUserStatusUseCase;
         this.listUserUseCase = listUserUseCase;
         this.assignRoleUseCase = assignRoleUseCase;
         this.listUserAssignmentsUseCase = listUserAssignmentsUseCase;
@@ -52,7 +53,13 @@ public class FounderController {
 
     @PutMapping("/deactivate/{id}")
     public ResponseEntity<Void> deactivateUser(@PathVariable UUID id) {
-        deactivateUserUseCase.execute(id);
+        toggleUserStatusUseCase.execute(id, false);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/activate/{id}")
+    public ResponseEntity<Void> activateUser(@PathVariable UUID id) {
+        toggleUserStatusUseCase.execute(id, true);
         return ResponseEntity.noContent().build();
     }
 

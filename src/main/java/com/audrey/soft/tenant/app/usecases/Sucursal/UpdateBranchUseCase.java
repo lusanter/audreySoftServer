@@ -5,6 +5,8 @@ import com.audrey.soft.tenant.app.mappers.SucursalMapper;
 import com.audrey.soft.tenant.domain.models.Sucursal;
 import com.audrey.soft.tenant.domain.ports.SucursalRepositoryPort;
 
+import java.util.UUID;
+
 
 public class UpdateBranchUseCase {
     private final SucursalRepositoryPort sucursalRepositoryPort;
@@ -16,10 +18,27 @@ public class UpdateBranchUseCase {
         this.sucursalRepositoryPort = sucursalRepositoryPort;
     }
 
-    public SucursalDTO execute(SucursalDTO request) {
-        Sucursal sucursal = sucursalMapper.toDomain(request);
+    public SucursalDTO execute(UUID id, SucursalDTO request) {
+
+        Sucursal sucursal = sucursalRepositoryPort.findById(id)
+                .orElseThrow(() -> new RuntimeException("Sucursal inexistente con ID: " + id));
+
+        sucursal.setNombre(request.nombre());
+        sucursal.setDireccion(request.direccion());
+        sucursal.setActive(request.active());
+
         Sucursal guardada = sucursalRepositoryPort.save(sucursal);
-        return sucursalMapper.toDto(guardada);
+
+        return new SucursalDTO(
+                guardada.getEmpresaId(),
+                guardada.getId(),
+                guardada.getNombre(),
+                guardada.getDireccion(),
+                guardada.getVertical(),
+                guardada.isActive(),
+                guardada.getCreatedAt()
+                );
+
     }
 
 }
