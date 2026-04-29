@@ -25,20 +25,20 @@ public class UpdateBranchUseCase {
 
         sucursal.setNombre(request.nombre());
         sucursal.setDireccion(request.direccion());
+        sucursal.setImagenUrl(request.imagenUrl());
         sucursal.setActive(request.active());
 
         Sucursal guardada = sucursalRepositoryPort.save(sucursal);
 
         return new SucursalDTO(
-                guardada.getEmpresaId(),
                 guardada.getId(),
+                guardada.getEmpresaId(),
                 guardada.getNombre(),
                 guardada.getDireccion(),
+                guardada.getImagenUrl(),
                 guardada.getVertical(),
                 guardada.isActive(),
                 guardada.getCreatedAt()
                 );
-
     }
-
 }

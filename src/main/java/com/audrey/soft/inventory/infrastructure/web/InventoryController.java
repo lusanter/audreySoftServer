@@ -4,8 +4,10 @@ import com.audrey.soft.inventory.app.dtos.*;
 import com.audrey.soft.inventory.app.usecases.Categoria.CreateCategoriaUseCase;
 import com.audrey.soft.inventory.app.usecases.Categoria.ListCategoriasUseCase;
 import com.audrey.soft.inventory.app.usecases.Categoria.UpdateCategoriaUseCase;
+import com.audrey.soft.inventory.app.usecases.Cliente.BuscarClientesUseCase;
 import com.audrey.soft.inventory.app.usecases.Cliente.CreateClienteUseCase;
 import com.audrey.soft.inventory.app.usecases.Cliente.ListClientesUseCase;
+import com.audrey.soft.inventory.app.usecases.Cliente.UpdateClienteUseCase;
 import com.audrey.soft.inventory.app.usecases.Producto.CreateProductoUseCase;
 import com.audrey.soft.inventory.app.usecases.Producto.ListProductosUseCase;
 import com.audrey.soft.inventory.app.usecases.Producto.UpdateProductoUseCase;
@@ -32,6 +34,8 @@ public class InventoryController {
     private final ListProductosUseCase listProductosUseCase;
     private final CreateClienteUseCase createClienteUseCase;
     private final ListClientesUseCase listClientesUseCase;
+    private final UpdateClienteUseCase updateClienteUseCase;
+    private final BuscarClientesUseCase buscarClientesUseCase;
     private final ListStockMovementsUseCase listStockMovementsUseCase;
     private final CreateStockEntradaUseCase createStockEntradaUseCase;
     private final CreateStockAjusteUseCase createStockAjusteUseCase;
@@ -48,6 +52,8 @@ public class InventoryController {
                                ListProductosUseCase listProductosUseCase,
                                CreateClienteUseCase createClienteUseCase,
                                ListClientesUseCase listClientesUseCase,
+                               UpdateClienteUseCase updateClienteUseCase,
+                               BuscarClientesUseCase buscarClientesUseCase,
                                ListStockMovementsUseCase listStockMovementsUseCase,
                                CreateStockEntradaUseCase createStockEntradaUseCase,
                                CreateStockAjusteUseCase createStockAjusteUseCase,
@@ -63,6 +69,8 @@ public class InventoryController {
         this.listProductosUseCase = listProductosUseCase;
         this.createClienteUseCase = createClienteUseCase;
         this.listClientesUseCase = listClientesUseCase;
+        this.updateClienteUseCase = updateClienteUseCase;
+        this.buscarClientesUseCase = buscarClientesUseCase;
         this.listStockMovementsUseCase = listStockMovementsUseCase;
         this.createStockEntradaUseCase = createStockEntradaUseCase;
         this.createStockAjusteUseCase = createStockAjusteUseCase;
@@ -131,6 +139,24 @@ public class InventoryController {
     @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','ENCARGADO','CAJERO')")
     public ResponseEntity<List<ClienteDTO>> listarClientes(@PathVariable UUID sucursalId) {
         return ResponseEntity.ok(listClientesUseCase.execute(sucursalId));
+    }
+
+    @GetMapping("/clientes/buscar")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','ENCARGADO','CAJERO')")
+    public ResponseEntity<List<ClienteDTO>> buscarClientes(
+            @PathVariable UUID sucursalId,
+            @RequestParam(required = false) String nombre,
+            @RequestParam(required = false) String documento,
+            @RequestParam(defaultValue = "false") boolean soloActivos) {
+        return ResponseEntity.ok(buscarClientesUseCase.execute(sucursalId, nombre, documento, soloActivos));
+    }
+
+    @PutMapping("/clientes/{clienteId}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','ENCARGADO','CAJERO')")
+    public ResponseEntity<ClienteDTO> actualizarCliente(@PathVariable UUID sucursalId,
+                                                        @PathVariable UUID clienteId,
+                                                        @RequestBody ClienteDTO request) {
+        return ResponseEntity.ok(updateClienteUseCase.execute(clienteId, request));
     }
 
     // ── Movimientos ─────────────────────────────────────────────────────────────

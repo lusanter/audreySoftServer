@@ -32,7 +32,7 @@ public class CreateBranchUseCase {
         }
 
         Sucursal nueva = new Sucursal(null, empresaId, request.nombre(),
-                request.direccion(), request.vertical(), true, null, null);
+                request.direccion(), request.imagenUrl(), request.vertical(), true, null, null);
         Sucursal guardada = sucursalRepository.save(nueva);
         return sucursalMapper.toDto(guardada);
     }

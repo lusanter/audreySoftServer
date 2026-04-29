@@ -17,13 +17,14 @@ public class Producto {
     private String unidad;
     private boolean active;
     private boolean controlStock;
+    private String imagenUrl;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public Producto(UUID id, UUID sucursalId, UUID categoriaId, String nombre, String descripcion,
                     BigDecimal precio, BigDecimal stockActual, BigDecimal stockMinimo,
                     String unidad, boolean active, boolean controlStock, BigDecimal precioCosto,
-                    LocalDateTime createdAt, LocalDateTime updatedAt) {
+                    String imagenUrl, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.sucursalId = sucursalId;
         this.categoriaId = categoriaId;
@@ -36,6 +37,7 @@ public class Producto {
         this.unidad = unidad;
         this.active = active;
         this.controlStock = controlStock;
+        this.imagenUrl = imagenUrl;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -64,6 +66,8 @@ public class Producto {
     public void setActive(boolean active) { this.active = active; }
     public boolean isControlStock() { return controlStock; }
     public void setControlStock(boolean controlStock) { this.controlStock = controlStock; }
+    public String getImagenUrl() { return imagenUrl; }
+    public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }

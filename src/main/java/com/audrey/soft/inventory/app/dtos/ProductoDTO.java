@@ -17,5 +17,6 @@ public record ProductoDTO(
         String unidad,
         boolean active,
         Boolean controlStock,
+        String imagenUrl,
         LocalDateTime createdAt
 ) {}

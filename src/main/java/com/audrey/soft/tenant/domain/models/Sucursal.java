@@ -10,17 +10,19 @@ public class Sucursal {
     private UUID empresaId;
     private String nombre;
     private String direccion;
+    private String imagenUrl;
     private VerticalType vertical;
     private boolean active;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public Sucursal(UUID id, UUID empresaId, String nombre, String direccion, VerticalType vertical,
-                    boolean active, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public Sucursal(UUID id, UUID empresaId, String nombre, String direccion, String imagenUrl,
+                    VerticalType vertical, boolean active, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.empresaId = empresaId;
         this.nombre = nombre;
         this.direccion = direccion;
+        this.imagenUrl = imagenUrl;
         this.vertical = vertical;
         this.active = active;
         this.createdAt = createdAt;
@@ -38,7 +40,8 @@ public class Sucursal {
 
     public String getDireccion() { return direccion; }
     public void setDireccion(String direccion) { this.direccion = direccion; }
-
+    public String getImagenUrl() { return imagenUrl; }
+    public void setImagenUrl(String imagenUrl) { this.imagenUrl = imagenUrl; }
     public VerticalType getVertical() { return vertical; }
     public void setVertical(VerticalType vertical) { this.vertical = vertical; }
 

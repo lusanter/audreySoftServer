@@ -61,6 +61,9 @@ public class ProductoEntity {
     @Builder.Default
     private BigDecimal precioCosto = BigDecimal.ZERO;
 
+    @Column(name = "imagen_url", length = 500)
+    private String imagenUrl;
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

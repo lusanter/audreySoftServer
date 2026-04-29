@@ -3,12 +3,15 @@ package com.audrey.soft.billing.infrastructure.persistence.adapters;
 import com.audrey.soft.billing.domain.models.Venta;
 import com.audrey.soft.billing.domain.models.VentaCobro;
 import com.audrey.soft.billing.domain.models.VentaItem;
+import com.audrey.soft.billing.domain.models.VentaOrigen;
 import com.audrey.soft.billing.domain.ports.VentaRepositoryPort;
 import com.audrey.soft.billing.infrastructure.persistence.entities.ComprobanteSerieEntity;
 import com.audrey.soft.billing.infrastructure.persistence.entities.VentaCobroEntity;
 import com.audrey.soft.billing.infrastructure.persistence.entities.VentaEntity;
 import com.audrey.soft.billing.infrastructure.persistence.entities.VentaItemEntity;
+import com.audrey.soft.billing.infrastructure.persistence.entities.VentaOrigenEntity;
 import com.audrey.soft.billing.infrastructure.persistence.repositories.SpringDataComprobanteSerieRepository;
+import com.audrey.soft.billing.infrastructure.persistence.repositories.SpringDataVentaOrigenRepository;
 import com.audrey.soft.billing.infrastructure.persistence.repositories.SpringDataVentaRepository;
 import com.audrey.soft.tenant.infrastructure.persistence.repositories.SpringDataSucursalRepository;
 import org.springframework.stereotype.Component;
@@ -23,13 +26,16 @@ public class VentaRepositoryAdapter implements VentaRepositoryPort {
     private final SpringDataVentaRepository jpa;
     private final SpringDataSucursalRepository sucursalJpa;
     private final SpringDataComprobanteSerieRepository serieJpa;
+    private final SpringDataVentaOrigenRepository ventaOrigenJpa;
 
     public VentaRepositoryAdapter(SpringDataVentaRepository jpa,
                                   SpringDataSucursalRepository sucursalJpa,
-                                  SpringDataComprobanteSerieRepository serieJpa) {
+                                  SpringDataComprobanteSerieRepository serieJpa,
+                                  SpringDataVentaOrigenRepository ventaOrigenJpa) {
         this.jpa = jpa;
         this.sucursalJpa = sucursalJpa;
         this.serieJpa = serieJpa;
+        this.ventaOrigenJpa = ventaOrigenJpa;
     }
 
     @Override
@@ -44,7 +50,6 @@ public class VentaRepositoryAdapter implements VentaRepositoryPort {
         VentaEntity entity = VentaEntity.builder()
                 .sucursal(sucursal)
                 .comprobanteSerie(serie)
-                .comandaId(venta.getComandaId())
                 .clienteId(venta.getClienteId())
                 .tipoComprobante(venta.getTipoComprobante())
                 .serie(venta.getSerie())
@@ -84,6 +89,16 @@ public class VentaRepositoryAdapter implements VentaRepositoryPort {
         }
 
         VentaEntity saved = jpa.save(entity);
+
+        if (venta.getOrigen() != null) {
+            VentaOrigenEntity origenEntity = VentaOrigenEntity.builder()
+                    .venta(saved)
+                    .tipoOrigen(venta.getOrigen().getTipoOrigen())
+                    .origenId(venta.getOrigen().getOrigenId())
+                    .build();
+            ventaOrigenJpa.save(origenEntity);
+        }
+
         return toDomain(saved);
     }
 
@@ -95,6 +110,15 @@ public class VentaRepositoryAdapter implements VentaRepositoryPort {
     @Override
     public List<Venta> findBySucursalId(UUID sucursalId) {
         return jpa.findBySucursalId(sucursalId).stream().map(this::toDomain).toList();
+    }
+
+    @Override
+    public List<Venta> findByFiltro(UUID sucursalId, com.audrey.soft.billing.app.dtos.VentaFiltroDTO filtro) {
+        var desde = filtro.desde().atStartOfDay();
+        var hasta = filtro.hasta().atTime(23, 59, 59, 999_999_999);
+        return jpa.findByFiltro(sucursalId, desde, hasta,
+                filtro.estado(), filtro.tipoComprobante(), filtro.serie(), filtro.sunatEnviado())
+                .stream().map(this::toDomain).toList();
     }
 
     private Venta toDomain(VentaEntity e) {
@@ -110,7 +134,10 @@ public class VentaRepositoryAdapter implements VentaRepositoryPort {
 
         return new Venta(e.getId(), e.getSucursal().getId(),
                 e.getComprobanteSerie() != null ? e.getComprobanteSerie().getId() : null,
-                e.getComandaId(), e.getClienteId(), e.getTipoComprobante(),
+                e.getOrigen() != null
+                        ? new VentaOrigen(e.getOrigen().getTipoOrigen(), e.getOrigen().getOrigenId())
+                        : null,
+                e.getClienteId(), e.getTipoComprobante(),
                 e.getSerie(), e.getCorrelativo(), e.getNumeroComprobante(),
                 e.getSubtotal(), e.getDescuento(), e.getIgv(), e.getTotal(),
                 items, cobros, e.getCreatedAt());

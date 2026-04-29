@@ -57,4 +57,12 @@ public class ClienteRepositoryAdapter implements ClienteRepositoryPort {
     public boolean existsByDocumentoAndSucursalId(String documento, UUID sucursalId) {
         return jpa.existsByDocumentoAndSucursalId(documento, sucursalId);
     }
+
+    @Override
+    public List<Cliente> buscar(UUID sucursalId, String nombre, String documento, boolean soloActivos) {
+        String nombrePattern   = (nombre    != null && !nombre.isBlank())    ? "%" + nombre    + "%" : "%";
+        String documentoPattern = (documento != null && !documento.isBlank()) ? "%" + documento + "%" : "%";
+        return jpa.buscar(sucursalId, nombrePattern, documentoPattern, soloActivos)
+                .stream().map(mapper::toDomain).toList();
+    }
 }

@@ -9,7 +9,7 @@ public class Venta {
     private UUID id;
     private UUID sucursalId;
     private UUID comprobanteSerieId;
-    private UUID comandaId;
+    private VentaOrigen origen;
     private UUID clienteId;
     private String tipoComprobante;
     private String serie;
@@ -23,14 +23,14 @@ public class Venta {
     private List<VentaCobro> cobros;
     private LocalDateTime createdAt;
 
-    public Venta(UUID id, UUID sucursalId, UUID comprobanteSerieId, UUID comandaId, UUID clienteId,
+    public Venta(UUID id, UUID sucursalId, UUID comprobanteSerieId, VentaOrigen origen, UUID clienteId,
                  String tipoComprobante, String serie, Integer correlativo, String numeroComprobante,
                  BigDecimal subtotal, BigDecimal descuento, BigDecimal igv, BigDecimal total,
                  List<VentaItem> items, List<VentaCobro> cobros, LocalDateTime createdAt) {
         this.id = id;
         this.sucursalId = sucursalId;
         this.comprobanteSerieId = comprobanteSerieId;
-        this.comandaId = comandaId;
+        this.origen = origen;
         this.clienteId = clienteId;
         this.tipoComprobante = tipoComprobante;
         this.serie = serie;
@@ -51,8 +51,8 @@ public class Venta {
     public void setSucursalId(UUID sucursalId) { this.sucursalId = sucursalId; }
     public UUID getComprobanteSerieId() { return comprobanteSerieId; }
     public void setComprobanteSerieId(UUID comprobanteSerieId) { this.comprobanteSerieId = comprobanteSerieId; }
-    public UUID getComandaId() { return comandaId; }
-    public void setComandaId(UUID comandaId) { this.comandaId = comandaId; }
+    public VentaOrigen getOrigen() { return origen; }
+    public void setOrigen(VentaOrigen origen) { this.origen = origen; }
     public UUID getClienteId() { return clienteId; }
     public void setClienteId(UUID clienteId) { this.clienteId = clienteId; }
     public String getTipoComprobante() { return tipoComprobante; }

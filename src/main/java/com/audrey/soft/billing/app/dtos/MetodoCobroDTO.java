@@ -7,5 +7,6 @@ public record MetodoCobroDTO(
         UUID sucursalId,
         String nombre,
         String codigo,
+        String imagenUrl,
         boolean activo
 ) {}

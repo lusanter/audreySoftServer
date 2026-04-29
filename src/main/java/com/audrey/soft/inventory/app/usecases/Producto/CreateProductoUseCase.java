@@ -39,6 +39,7 @@ public class CreateProductoUseCase {
                 request.stockMinimo() != null ? request.stockMinimo() : BigDecimal.ZERO,
                 request.unidad() != null ? request.unidad() : "UND",
                 true, controlStock, precioCosto,
+                request.imagenUrl(),
                 null, null
         );
 

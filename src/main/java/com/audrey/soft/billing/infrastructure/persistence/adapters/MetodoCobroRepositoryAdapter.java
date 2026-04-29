@@ -21,9 +21,19 @@ public class MetodoCobroRepositoryAdapter implements MetodoCobroRepositoryPort {
 
     @Override
     public MetodoCobro save(MetodoCobro m) {
-        MetodoCobroEntity entity = MetodoCobroEntity.builder()
-                .id(m.getId()).sucursalId(m.getSucursalId())
-                .nombre(m.getNombre()).codigo(m.getCodigo()).activo(m.isActivo()).build();
+        if (m.getId() != null && jpa.existsById(m.getId())) {
+            // Update directo sin pasar por merge
+            jpa.updateFields(m.getId(), m.getNombre(), m.getCodigo(), m.getImagenUrl(), m.isActivo());
+            return jpa.findById(m.getId()).map(this::toDomain).orElseThrow();
+        }
+        // Insert
+        MetodoCobroEntity entity = new MetodoCobroEntity();
+        entity.setId(m.getId());
+        entity.setSucursalId(m.getSucursalId());
+        entity.setNombre(m.getNombre());
+        entity.setCodigo(m.getCodigo());
+        entity.setImagenUrl(m.getImagenUrl());
+        entity.setActivo(m.isActivo());
         return toDomain(jpa.save(entity));
     }
 
@@ -39,6 +49,6 @@ public class MetodoCobroRepositoryAdapter implements MetodoCobroRepositoryPort {
 
     private MetodoCobro toDomain(MetodoCobroEntity e) {
         return new MetodoCobro(e.getId(), e.getSucursalId(), e.getNombre(),
-                e.getCodigo(), e.isActivo(), e.getCreatedAt());
+                e.getCodigo(), e.getImagenUrl(), e.isActivo(), e.getCreatedAt());
     }
 }

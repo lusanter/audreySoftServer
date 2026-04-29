@@ -40,6 +40,7 @@ public class SucursalRepositoryAdapter implements SucursalRepositoryPort {
                 .empresa(empresa)
                 .nombre(sucursal.getNombre())
                 .direccion(sucursal.getDireccion())
+                .imagenUrl(sucursal.getImagenUrl())
                 .active(sucursal.isActive())
                 .build();
 

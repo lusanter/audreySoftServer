@@ -9,6 +9,7 @@ public record SucursalDTO(
         UUID empresaId,
         String nombre,
         String direccion,
+        String imagenUrl,
         VerticalType vertical,
         boolean active,
         LocalDateTime createdAt) {

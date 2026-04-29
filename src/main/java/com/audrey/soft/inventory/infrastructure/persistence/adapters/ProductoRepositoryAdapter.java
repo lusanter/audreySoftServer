@@ -53,6 +53,7 @@ public class ProductoRepositoryAdapter implements ProductoRepositoryPort {
                 .unidad(producto.getUnidad())
                 .active(producto.isActive())
                 .controlStock(producto.isControlStock())
+                .imagenUrl(producto.getImagenUrl())
                 .build();
         return mapper.toDomain(jpa.save(entity));
     }

@@ -33,6 +33,9 @@ public class SucursalEntity {
     @Column(length = 250)
     private String direccion;
 
+    @Column(name = "imagen_url", length = 500)
+    private String imagenUrl;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "vertical_type", nullable = false, length = 50)
     @Builder.Default

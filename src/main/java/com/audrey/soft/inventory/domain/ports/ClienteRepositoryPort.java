@@ -11,4 +11,5 @@ public interface ClienteRepositoryPort {
     Optional<Cliente> findById(UUID id);
     List<Cliente> findBySucursalId(UUID sucursalId);
     boolean existsByDocumentoAndSucursalId(String documento, UUID sucursalId);
+    List<Cliente> buscar(UUID sucursalId, String nombre, String documento, boolean soloActivos);
 }

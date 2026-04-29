@@ -8,7 +8,8 @@ import java.util.UUID;
 public record VentaDTO(
         UUID id,
         UUID sucursalId,
-        UUID comandaId,
+        String tipoOrigen,
+        UUID origenId,
         UUID clienteId,
         String tipoComprobante,
         String serie,

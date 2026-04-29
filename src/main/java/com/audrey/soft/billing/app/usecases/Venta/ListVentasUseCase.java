@@ -22,7 +22,10 @@ public class ListVentasUseCase {
                             i.getCantidad(), i.getPrecioUnitario())).toList();
             var cobros = v.getCobros().stream().map(c ->
                     new VentaCobroDTO(c.getId(), c.getMetodoCobro(), c.getMonto(), c.getReferencia())).toList();
-            return new VentaDTO(v.getId(), v.getSucursalId(), v.getComandaId(), v.getClienteId(),
+            return new VentaDTO(v.getId(), v.getSucursalId(),
+                    v.getOrigen() != null ? v.getOrigen().getTipoOrigen() : null,
+                    v.getOrigen() != null ? v.getOrigen().getOrigenId()   : null,
+                    v.getClienteId(),
                     v.getTipoComprobante(), v.getSerie(), v.getCorrelativo(), v.getNumeroComprobante(),
                     v.getSubtotal(), v.getDescuento(), v.getIgv(), v.getTotal(),
                     "COBRADA", false, items, cobros, v.getCreatedAt());

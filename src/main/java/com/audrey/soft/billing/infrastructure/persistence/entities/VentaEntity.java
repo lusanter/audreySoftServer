@@ -27,8 +27,8 @@ public class VentaEntity {
     @JoinColumn(name = "comprobante_serie_id")
     private ComprobanteSerieEntity comprobanteSerie;
 
-    @Column(name = "comanda_id")
-    private UUID comandaId;
+    @OneToOne(mappedBy = "venta", fetch = FetchType.LAZY, optional = true)
+    private VentaOrigenEntity origen;
 
     @Column(name = "cliente_id")
     private UUID clienteId;

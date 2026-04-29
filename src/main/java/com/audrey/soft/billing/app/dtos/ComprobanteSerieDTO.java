@@ -8,8 +8,8 @@ public record ComprobanteSerieDTO(
         UUID sucursalId,
         String tipoComprobante,
         String serie,
-        int correlativoActual,
-        int correlativoMax,
-        boolean activo,
+        Integer correlativoActual,
+        Integer correlativoMax,
+        Boolean activo,
         LocalDateTime createdAt
 ) {}

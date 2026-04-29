@@ -51,5 +51,26 @@ databaseChangeLog:
       file: changes/17-backfill-ajustes-motivos.sql
       relativeToChangelogFile: true
   - include:
-      file: changes/18-seed-demo-inventory.sql
+      file: changes/19-metodos-cobro-add-imagen-url.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/20-ventas-add-missing-columns.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/21-ventas-add-remaining-columns.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/22-billing-venta-origen.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/23-add-imagen-url.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/24-crear-tablas-plantillas.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/25-fix-plantillas-uuid-types.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/26-crear-tabla-flyers-generados.sql
       relativeToChangelogFile: true

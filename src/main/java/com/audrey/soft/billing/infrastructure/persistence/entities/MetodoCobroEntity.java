@@ -25,6 +25,9 @@ public class MetodoCobroEntity {
     @Column(nullable = false, length = 30)
     private String codigo;
 
+    @Column(name = "imagen_url", length = 500)
+    private String imagenUrl;
+
     @Column(nullable = false)
     @Builder.Default
     private boolean activo = true;

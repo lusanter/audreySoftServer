@@ -4,6 +4,7 @@ import com.audrey.soft.billing.domain.models.ComprobanteSerie;
 import com.audrey.soft.billing.domain.models.Venta;
 import com.audrey.soft.billing.domain.models.VentaCobro;
 import com.audrey.soft.billing.domain.models.VentaItem;
+import com.audrey.soft.billing.domain.models.VentaOrigen;
 import com.audrey.soft.billing.domain.ports.ComprobanteSerieRepositoryPort;
 import com.audrey.soft.billing.domain.ports.VentaRepositoryPort;
 import com.audrey.soft.inventory.domain.ports.ProductoRepositoryPort;
@@ -100,7 +101,8 @@ public class CerrarComandaUseCase {
                 .toList();
 
         // 5. Crear venta
-        Venta venta = new Venta(null, comanda.getSucursalId(), serie.getId(), comanda.getId(),
+        Venta venta = new Venta(null, comanda.getSucursalId(), serie.getId(),
+                new VentaOrigen("COMANDA", comanda.getId()),
                 request.clienteId(), request.tipoComprobante(),
                 serie.getSerie(), correlativo, numeroComprobante,
                 subtotal, descuento, igv, total,

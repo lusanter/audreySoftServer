@@ -16,7 +16,7 @@ public class ListMetodosCobroUseCase {
     public List<MetodoCobroDTO> execute(UUID sucursalId) {
         return metodoCobroRepository.findDisponiblesBySucursal(sucursalId).stream()
                 .map(m -> new MetodoCobroDTO(m.getId(), m.getSucursalId(), m.getNombre(),
-                        m.getCodigo(), m.isActivo()))
+                        m.getCodigo(), m.getImagenUrl(), m.isActivo()))
                 .toList();
     }
 }
