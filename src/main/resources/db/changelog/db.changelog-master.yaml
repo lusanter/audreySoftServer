@@ -74,3 +74,15 @@ databaseChangeLog:
   - include:
       file: changes/26-crear-tabla-flyers-generados.sql
       relativeToChangelogFile: true
+  - include:
+      file: changes/27-crear-esquema-fiscal.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/28-fiscal-config-por-sucursal.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/29-venta-impuestos-y-limpieza.sql
+      relativeToChangelogFile: true
+  - include:
+      file: changes/30-venta-fiscal-y-limpieza-sunat.sql
+      relativeToChangelogFile: true

@@ -42,6 +42,8 @@ public class SucursalRepositoryAdapter implements SucursalRepositoryPort {
                 .direccion(sucursal.getDireccion())
                 .imagenUrl(sucursal.getImagenUrl())
                 .active(sucursal.isActive())
+                .paisCodigo(sucursal.getPaisCodigo() != null ? sucursal.getPaisCodigo() : "PER")
+                .monedaCodigo(sucursal.getMonedaCodigo() != null ? sucursal.getMonedaCodigo() : "PEN")
                 .build();
 
         return mapper.toDomain(sucursalJpa.save(entity));

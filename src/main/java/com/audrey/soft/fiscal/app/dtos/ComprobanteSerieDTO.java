@@ -1,4 +1,4 @@
-package com.audrey.soft.billing.app.dtos;
+package com.audrey.soft.fiscal.app.dtos;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

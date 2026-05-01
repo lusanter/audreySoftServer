@@ -29,7 +29,7 @@ public interface SpringDataProductoRepository extends JpaRepository<ProductoEnti
               (SELECT COUNT(id) FROM inventory.productos WHERE sucursal_id = cast(:sucursalId as uuid) AND active = true AND control_stock = true AND stock_actual <= stock_minimo) as productos_stock_critico,
               (SELECT COALESCE(SUM(stock_actual * precio_costo), 0) FROM inventory.productos WHERE sucursal_id = cast(:sucursalId as uuid) AND active = true AND control_stock = true) as valor_inventario,
               (SELECT COALESCE(SUM(stock_actual * (precio - precio_costo)), 0) FROM inventory.productos WHERE sucursal_id = cast(:sucursalId as uuid) AND active = true AND control_stock = true) as margen_estimado,
-              (SELECT COALESCE(ABS(SUM(sm.cantidad * sm.precio_costo)), 0) 
+              (SELECT COALESCE(ABS(SUM(sm.cantidad * COALESCE(sm.precio_costo, p.precio_costo))), 0) 
                FROM inventory.stock_movements sm 
                JOIN inventory.productos p ON p.id = sm.producto_id 
                WHERE p.sucursal_id = cast(:sucursalId as uuid) 

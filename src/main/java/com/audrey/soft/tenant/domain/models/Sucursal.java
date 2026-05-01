@@ -13,11 +13,14 @@ public class Sucursal {
     private String imagenUrl;
     private VerticalType vertical;
     private boolean active;
+    private String paisCodigo;
+    private String monedaCodigo;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
     public Sucursal(UUID id, UUID empresaId, String nombre, String direccion, String imagenUrl,
-                    VerticalType vertical, boolean active, LocalDateTime createdAt, LocalDateTime updatedAt) {
+                    VerticalType vertical, boolean active, String paisCodigo, String monedaCodigo,
+                    LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.empresaId = empresaId;
         this.nombre = nombre;
@@ -25,6 +28,8 @@ public class Sucursal {
         this.imagenUrl = imagenUrl;
         this.vertical = vertical;
         this.active = active;
+        this.paisCodigo = paisCodigo;
+        this.monedaCodigo = monedaCodigo;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
@@ -47,6 +52,11 @@ public class Sucursal {
 
     public boolean isActive() { return active; }
     public void setActive(boolean active) { this.active = active; }
+
+    public String getPaisCodigo() { return paisCodigo; }
+    public void setPaisCodigo(String paisCodigo) { this.paisCodigo = paisCodigo; }
+    public String getMonedaCodigo() { return monedaCodigo; }
+    public void setMonedaCodigo(String monedaCodigo) { this.monedaCodigo = monedaCodigo; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }

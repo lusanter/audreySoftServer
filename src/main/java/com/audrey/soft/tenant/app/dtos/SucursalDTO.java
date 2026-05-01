@@ -12,6 +12,8 @@ public record SucursalDTO(
         String imagenUrl,
         VerticalType vertical,
         boolean active,
+        String paisCodigo,
+        String monedaCodigo,
         LocalDateTime createdAt) {
     public SucursalDTO {
         if (nombre == null || nombre.isBlank())

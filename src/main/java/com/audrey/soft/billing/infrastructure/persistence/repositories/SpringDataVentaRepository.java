@@ -16,13 +16,14 @@ public interface SpringDataVentaRepository extends JpaRepository<VentaEntity, UU
 
     @Query(value = """
         SELECT v.* FROM billing.ventas v
+        LEFT JOIN fiscal.venta_fiscal vf ON vf.venta_id = v.id
         WHERE v.sucursal_id = :sucursalId
           AND v.created_at >= :desde
           AND v.created_at <= :hasta
           AND (:estado IS NULL OR v.estado = :estado)
           AND (:tipoComprobante IS NULL OR v.tipo_comprobante = :tipoComprobante)
           AND (:serie IS NULL OR v.serie = :serie)
-          AND (:sunatEnviado IS NULL OR v.sunat_enviado = :sunatEnviado)
+          AND (:fiscalEnviado IS NULL OR vf.enviado = :fiscalEnviado)
         ORDER BY v.created_at DESC
         """, nativeQuery = true)
     List<VentaEntity> findByFiltro(
@@ -32,6 +33,6 @@ public interface SpringDataVentaRepository extends JpaRepository<VentaEntity, UU
             @Param("estado") String estado,
             @Param("tipoComprobante") String tipoComprobante,
             @Param("serie") String serie,
-            @Param("sunatEnviado") Boolean sunatEnviado
+            @Param("fiscalEnviado") Boolean fiscalEnviado
     );
 }

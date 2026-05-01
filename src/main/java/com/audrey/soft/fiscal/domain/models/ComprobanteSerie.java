@@ -1,4 +1,4 @@
-package com.audrey.soft.billing.domain.models;
+package com.audrey.soft.fiscal.domain.models;
 
 import java.time.LocalDateTime;
 import java.util.UUID;

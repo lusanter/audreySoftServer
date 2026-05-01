@@ -10,6 +10,8 @@ import org.mapstruct.MappingConstants;
 public interface SucursalEntityMapper {
 
     @Mapping(target = "empresaId", source = "empresa.id")
+    @Mapping(target = "paisCodigo", source = "paisCodigo")
+    @Mapping(target = "monedaCodigo", source = "monedaCodigo")
     Sucursal toDomain(SucursalEntity entity);
 
     // toEntity se hace manualmente en el adaptador porque necesita cargar EmpresaEntity

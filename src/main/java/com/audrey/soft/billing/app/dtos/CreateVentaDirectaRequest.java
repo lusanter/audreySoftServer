@@ -20,6 +20,7 @@ public record CreateVentaDirectaRequest(
 
     public record CobroRequest(
             UUID metodoCobro,
+            String nombre,
             BigDecimal monto,
             String referencia
     ) {}

@@ -45,6 +45,14 @@ public class SucursalEntity {
     @Builder.Default
     private boolean active = true;
 
+    @Column(name = "pais_codigo", nullable = false, length = 3)
+    @Builder.Default
+    private String paisCodigo = "PER";
+
+    @Column(name = "moneda_codigo", nullable = false, length = 3)
+    @Builder.Default
+    private String monedaCodigo = "PEN";
+
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;

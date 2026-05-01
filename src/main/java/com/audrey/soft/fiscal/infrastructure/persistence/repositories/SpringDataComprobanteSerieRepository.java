@@ -1,6 +1,6 @@
-package com.audrey.soft.billing.infrastructure.persistence.repositories;
+package com.audrey.soft.fiscal.infrastructure.persistence.repositories;
 
-import com.audrey.soft.billing.infrastructure.persistence.entities.ComprobanteSerieEntity;
+import com.audrey.soft.fiscal.infrastructure.persistence.entities.ComprobanteSerieEntity;
 import jakarta.persistence.LockModeType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;

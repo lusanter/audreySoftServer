@@ -43,12 +43,15 @@ public class CreateStockAjusteUseCase {
         BigDecimal delta = motivo.getTipo().equals("DECREMENTO") ? cantidad.negate() : cantidad;
 
         // Registrar movimiento AJUSTE
+        // Para DECREMENTO usamos el precio_costo actual del producto para poder calcular pérdida en KPIs
+        BigDecimal precioCostoMovimiento = motivo.getTipo().equals("DECREMENTO") ? producto.getPrecioCosto() : null;
+
         LocalDateTime ahora = LocalDateTime.now();
         stockMovementRepository.save(
                 producto.getId(),
                 "AJUSTE",
                 delta,
-                null, // No afecta precio costo promedio/referencia en ajustes simples
+                precioCostoMovimiento,
                 null, // referencia_id
                 motivo.getId(),
                 request.nota(),

@@ -38,6 +38,8 @@ public class UpdateBranchUseCase {
                 guardada.getImagenUrl(),
                 guardada.getVertical(),
                 guardada.isActive(),
+                guardada.getPaisCodigo(),
+                guardada.getMonedaCodigo(),
                 guardada.getCreatedAt()
                 );
     }

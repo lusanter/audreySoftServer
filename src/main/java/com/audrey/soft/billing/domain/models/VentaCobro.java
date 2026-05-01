@@ -8,19 +8,23 @@ public class VentaCobro {
     private UUID id;
     private UUID ventaId;
     private UUID metodoCobro;
+    private String nombreMetodoCobro;
     private BigDecimal monto;
     private String referencia;
     private LocalDateTime createdAt;
 
-    public VentaCobro(UUID id, UUID ventaId, UUID metodoCobro, BigDecimal monto,
-                      String referencia, LocalDateTime createdAt) {
+    public VentaCobro(UUID id, UUID ventaId, UUID metodoCobro, String nombreMetodoCobro,
+                      BigDecimal monto, String referencia, LocalDateTime createdAt) {
         this.id = id;
         this.ventaId = ventaId;
         this.metodoCobro = metodoCobro;
+        this.nombreMetodoCobro = nombreMetodoCobro;
         this.monto = monto;
         this.referencia = referencia;
         this.createdAt = createdAt;
     }
+
+
 
     public UUID getId() { return id; }
     public void setId(UUID id) { this.id = id; }
@@ -28,6 +32,8 @@ public class VentaCobro {
     public void setVentaId(UUID ventaId) { this.ventaId = ventaId; }
     public UUID getMetodoCobro() { return metodoCobro; }
     public void setMetodoCobro(UUID metodoCobro) { this.metodoCobro = metodoCobro; }
+    public String getNombreMetodoCobro() { return nombreMetodoCobro; }
+    public void setNombreMetodoCobro(String nombreMetodoCobro) { this.nombreMetodoCobro = nombreMetodoCobro; }
     public BigDecimal getMonto() { return monto; }
     public void setMonto(BigDecimal monto) { this.monto = monto; }
     public String getReferencia() { return referencia; }

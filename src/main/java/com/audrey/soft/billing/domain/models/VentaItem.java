@@ -10,6 +10,9 @@ public class VentaItem {
     private String nombreProducto;
     private BigDecimal cantidad;
     private BigDecimal precioUnitario;
+    private String codigo;
+    private String nombre;
+
 
     public VentaItem(UUID id, UUID ventaId, UUID productoId, String nombreProducto,
                      BigDecimal cantidad, BigDecimal precioUnitario) {

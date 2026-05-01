@@ -1,12 +1,15 @@
 package com.audrey.soft.restaurant.app.usecases.Comanda;
 
-import com.audrey.soft.billing.domain.models.ComprobanteSerie;
-import com.audrey.soft.billing.domain.models.Venta;
-import com.audrey.soft.billing.domain.models.VentaCobro;
-import com.audrey.soft.billing.domain.models.VentaItem;
-import com.audrey.soft.billing.domain.models.VentaOrigen;
-import com.audrey.soft.billing.domain.ports.ComprobanteSerieRepositoryPort;
+import com.audrey.soft.billing.domain.models.*;
 import com.audrey.soft.billing.domain.ports.VentaRepositoryPort;
+import com.audrey.soft.fiscal.domain.models.ComprobanteSerie;
+import com.audrey.soft.fiscal.domain.models.ImpuestoCalculator;
+import com.audrey.soft.fiscal.domain.models.NumeroComprobanteFormatterFactory;
+import com.audrey.soft.fiscal.domain.models.VentaImpuesto;
+import com.audrey.soft.fiscal.domain.ports.ComprobanteSerieRepositoryPort;
+import com.audrey.soft.fiscal.infrastructure.persistence.entities.ImpuestoTipoEntity;
+import com.audrey.soft.fiscal.infrastructure.persistence.repositories.SpringDataFiscalConfigRepository;
+import com.audrey.soft.fiscal.infrastructure.persistence.repositories.SpringDataImpuestoTipoRepository;
 import com.audrey.soft.inventory.domain.ports.ProductoRepositoryPort;
 import com.audrey.soft.inventory.domain.ports.StockMovementRepositoryPort;
 import com.audrey.soft.restaurant.app.dtos.CerrarComandaRequest;
@@ -20,8 +23,8 @@ import com.audrey.soft.restaurant.domain.ports.MesaRepositoryPort;
 import jakarta.transaction.Transactional;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
 import java.time.LocalDateTime;
+import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,6 +37,8 @@ public class CerrarComandaUseCase {
     private final ProductoRepositoryPort productoRepository;
     private final StockMovementRepositoryPort stockMovementRepository;
     private final ComandaMapper comandaMapper;
+    private final SpringDataFiscalConfigRepository fiscalConfigRepository;
+    private final SpringDataImpuestoTipoRepository impuestoTipoRepository;
 
     public CerrarComandaUseCase(ComandaRepositoryPort comandaRepository,
                                 MesaRepositoryPort mesaRepository,
@@ -41,7 +46,9 @@ public class CerrarComandaUseCase {
                                 ComprobanteSerieRepositoryPort serieRepository,
                                 ProductoRepositoryPort productoRepository,
                                 StockMovementRepositoryPort stockMovementRepository,
-                                ComandaMapper comandaMapper) {
+                                ComandaMapper comandaMapper,
+                                SpringDataFiscalConfigRepository fiscalConfigRepository,
+                                SpringDataImpuestoTipoRepository impuestoTipoRepository) {
         this.comandaRepository = comandaRepository;
         this.mesaRepository = mesaRepository;
         this.ventaRepository = ventaRepository;
@@ -49,6 +56,8 @@ public class CerrarComandaUseCase {
         this.productoRepository = productoRepository;
         this.stockMovementRepository = stockMovementRepository;
         this.comandaMapper = comandaMapper;
+        this.fiscalConfigRepository = fiscalConfigRepository;
+        this.impuestoTipoRepository = impuestoTipoRepository;
     }
 
     @Transactional
@@ -68,9 +77,28 @@ public class CerrarComandaUseCase {
                         "No hay serie activa para " + request.tipoComprobante() + " en esta sucursal"));
 
         int correlativo = serieRepository.incrementarCorrelativo(serie.getId());
-        String numeroComprobante = serie.getSerie() + "-" + String.format("%08d", correlativo);
 
-        // 2. Calcular montos
+        // 2. Leer fiscal config de la sucursal
+        var fiscalConfig = fiscalConfigRepository.findBySucursalId(comanda.getSucursalId()).orElse(null);
+        String fiscalSistemaId = fiscalConfig != null ? fiscalConfig.getFiscalSistemaId() : null;
+        boolean preciosIncluyenImpuesto = fiscalConfig == null || fiscalConfig.isPreciosIncluyenImpuesto();
+
+        // Cargar tipos de impuesto
+        List<ImpuestoTipoEntity> impuestoTipos = List.of();
+        if (fiscalConfig != null && fiscalConfig.getImpuestosDefault() != null && fiscalConfig.getImpuestosDefault().length > 0) {
+            impuestoTipos = impuestoTipoRepository.findAllByIdIn(Arrays.asList(fiscalConfig.getImpuestosDefault()));
+        }
+
+        // Generar número de comprobante
+        String numeroComprobante;
+        if (fiscalSistemaId != null && !"INTERNO".equals(fiscalSistemaId)) {
+            var formatter = NumeroComprobanteFormatterFactory.forSistema(fiscalSistemaId);
+            numeroComprobante = formatter.format(serie.getSerie(), correlativo);
+        } else {
+            numeroComprobante = serie.getSerie() + "-" + String.format("%08d", correlativo);
+        }
+
+        // 3. Calcular montos
         var itemsActivos = comanda.getItems().stream()
                 .filter(i -> i.getEstado() != EstadoItem.CANCELADO).toList();
 
@@ -80,12 +108,17 @@ public class CerrarComandaUseCase {
 
         BigDecimal descuento = request.descuento() != null ? request.descuento() : BigDecimal.ZERO;
         BigDecimal base = subtotal.subtract(descuento);
-        // IGV 18% incluido en precio (precio ya incluye IGV)
-        BigDecimal igv = base.multiply(new BigDecimal("0.18"))
-                .divide(new BigDecimal("1.18"), 2, RoundingMode.HALF_UP);
-        BigDecimal total = base;
 
-        // 3. Construir snapshot de items para billing
+        // Calcular impuestos usando ImpuestoCalculator
+        List<VentaImpuesto> impuestos = ImpuestoCalculator.calcular(base, impuestoTipos, preciosIncluyenImpuesto);
+
+        BigDecimal totalImpuestos = impuestos.stream()
+                .map(VentaImpuesto::getMonto)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
+
+        BigDecimal total = preciosIncluyenImpuesto ? base : base.add(totalImpuestos);
+
+        // 4. Construir snapshot de items para billing
         List<VentaItem> ventaItems = itemsActivos.stream().map(i -> {
             var producto = productoRepository.findById(i.getProductoId()).orElse(null);
             return new VentaItem(null, null,
@@ -95,31 +128,31 @@ public class CerrarComandaUseCase {
                     i.getPrecioUnitario());
         }).toList();
 
-        // 4. Construir cobros
+        // 5. Construir cobros
         List<VentaCobro> cobros = request.cobros().stream()
-                .map(c -> new VentaCobro(null, null, c.metodoCobro(), c.monto(), c.referencia(), LocalDateTime.now()))
+                .map(c -> new VentaCobro(null, null, c.metodoCobro(), c.nombre(), c.monto(), c.referencia(), LocalDateTime.now()))
                 .toList();
 
-        // 5. Crear venta
+        // 6. Crear venta
         Venta venta = new Venta(null, comanda.getSucursalId(), serie.getId(),
-                new VentaOrigen("COMANDA", comanda.getId()),
+                new VentaOrigen(TipoOrigen.COMANDA.name(), comanda.getId()),
                 request.clienteId(), request.tipoComprobante(),
                 serie.getSerie(), correlativo, numeroComprobante,
-                subtotal, descuento, igv, total,
-                ventaItems, cobros, LocalDateTime.now());
+                subtotal, descuento, base, totalImpuestos, total, "COBRADA", false, fiscalSistemaId,
+                ventaItems, cobros, impuestos, LocalDateTime.now());
 
         ventaRepository.save(venta);
 
-        // 6. Descontar stock y registrar movimiento por cada item (solo si el producto controla stock)
+        // 7. Descontar stock y registrar movimiento por cada item (solo si el producto controla stock)
         LocalDateTime ahora = LocalDateTime.now();
         String notaMovimiento = "Venta: " + numeroComprobante;
 
         itemsActivos.forEach(item -> {
             var producto = productoRepository.findById(item.getProductoId()).orElse(null);
             if (producto != null && producto.isControlStock()) {
-                // 6a. Descontar stock
+                // 7a. Descontar stock
                 productoRepository.decrementarStock(item.getProductoId(), item.getCantidad());
-                // 6b. Registrar movimiento SALIDA (precioCosto=null — no es una compra)
+                // 7b. Registrar movimiento SALIDA (precioCosto=null — no es una compra)
                 stockMovementRepository.save(
                         item.getProductoId(),
                         "SALIDA",
@@ -133,7 +166,7 @@ public class CerrarComandaUseCase {
             }
         });
 
-        // 7. Cerrar comanda y liberar mesa
+        // 8. Cerrar comanda y liberar mesa
         comanda.setEstado(EstadoComanda.CERRADA);
         comanda.setClosedAt(LocalDateTime.now());
         comanda.setTotal(total);

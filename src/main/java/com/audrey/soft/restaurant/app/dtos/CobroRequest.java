@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public record CobroRequest(
         UUID metodoCobro,
+        String nombre,
         BigDecimal monto,
         String referencia    // número de operación Yape/Plin/transferencia, opcional
 ) {}

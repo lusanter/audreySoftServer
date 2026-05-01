@@ -1,6 +1,6 @@
-package com.audrey.soft.billing.domain.ports;
+package com.audrey.soft.fiscal.domain.ports;
 
-import com.audrey.soft.billing.domain.models.ComprobanteSerie;
+import com.audrey.soft.fiscal.domain.models.ComprobanteSerie;
 
 import java.util.List;
 import java.util.Optional;

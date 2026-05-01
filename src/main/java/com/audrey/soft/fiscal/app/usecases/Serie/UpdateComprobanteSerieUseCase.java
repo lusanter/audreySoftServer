@@ -1,7 +1,7 @@
-package com.audrey.soft.billing.app.usecases.Serie;
+package com.audrey.soft.fiscal.app.usecases.Serie;
 
-import com.audrey.soft.billing.app.dtos.ComprobanteSerieDTO;
-import com.audrey.soft.billing.domain.ports.ComprobanteSerieRepositoryPort;
+import com.audrey.soft.fiscal.app.dtos.ComprobanteSerieDTO;
+import com.audrey.soft.fiscal.domain.ports.ComprobanteSerieRepositoryPort;
 
 import java.util.UUID;
 

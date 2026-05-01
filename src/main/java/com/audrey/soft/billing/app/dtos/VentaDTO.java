@@ -1,5 +1,7 @@
 package com.audrey.soft.billing.app.dtos;
 
+import com.audrey.soft.fiscal.app.dtos.VentaImpuestoDTO;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -17,10 +19,12 @@ public record VentaDTO(
         String numeroComprobante,
         BigDecimal subtotal,
         BigDecimal descuento,
-        BigDecimal igv,
+        BigDecimal totalImpuestos,
         BigDecimal total,
         String estado,
-        boolean sunatEnviado,
+        boolean fiscalEnviado,
+        String fiscalSistemaId,
+        List<VentaImpuestoDTO> impuestos,
         List<VentaItemDTO> items,
         List<VentaCobroDTO> cobros,
         LocalDateTime createdAt

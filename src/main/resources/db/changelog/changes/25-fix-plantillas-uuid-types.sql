@@ -1,3 +1,6 @@
+-- liquibase formatted sql
+
+-- changeset santer:25-fix-plantillas-uuid-types
 -- ============================================================================
 -- Migración 25: Corregir tipos UUID en tabla design.plantillas
 -- ============================================================================

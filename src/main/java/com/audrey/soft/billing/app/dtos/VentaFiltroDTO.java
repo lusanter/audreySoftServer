@@ -8,5 +8,5 @@ public record VentaFiltroDTO(
         String estado,
         String tipoComprobante,
         String serie,
-        Boolean sunatEnviado
+        Boolean fiscalEnviado
 ) {}

@@ -1,6 +1,5 @@
 package com.audrey.soft.billing.infrastructure.web;
 
-import com.audrey.soft.billing.app.dtos.ComprobanteSerieDTO;
 import com.audrey.soft.billing.app.dtos.CreateVentaDirectaRequest;
 import com.audrey.soft.billing.app.dtos.MetodoCobroDTO;
 import com.audrey.soft.billing.app.dtos.MetodoCobroRequestDTO;
@@ -9,11 +8,9 @@ import com.audrey.soft.billing.app.dtos.VentaFiltroDTO;
 import com.audrey.soft.billing.app.usecases.MetodoCobro.CreateMetodoCobroUseCase;
 import com.audrey.soft.billing.app.usecases.MetodoCobro.ListMetodosCobroUseCase;
 import com.audrey.soft.billing.app.usecases.MetodoCobro.UpdateMetodoCobroUseCase;
-import com.audrey.soft.billing.app.usecases.Serie.CreateComprobanteSerieUseCase;
-import com.audrey.soft.billing.app.usecases.Serie.ListComprobanteSeriesUseCase;
-import com.audrey.soft.billing.app.usecases.Serie.UpdateComprobanteSerieUseCase;
 import com.audrey.soft.billing.app.usecases.Venta.BuscarVentasUseCase;
 import com.audrey.soft.billing.app.usecases.Venta.CreateVentaDirectaUseCase;
+import com.audrey.soft.billing.app.usecases.Venta.GetVentaByIdUseCase;
 import com.audrey.soft.billing.app.usecases.Venta.ListVentasUseCase;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -31,29 +28,23 @@ public class BillingController {
 
     private final ListVentasUseCase listVentasUseCase;
     private final BuscarVentasUseCase buscarVentasUseCase;
+    private final GetVentaByIdUseCase getVentaByIdUseCase;
     private final CreateVentaDirectaUseCase createVentaDirectaUseCase;
-    private final CreateComprobanteSerieUseCase createSerieUseCase;
-    private final ListComprobanteSeriesUseCase listSeriesUseCase;
-    private final UpdateComprobanteSerieUseCase updateSerieUseCase;
     private final ListMetodosCobroUseCase listMetodosCobroUseCase;
     private final CreateMetodoCobroUseCase createMetodoCobroUseCase;
     private final UpdateMetodoCobroUseCase updateMetodoCobroUseCase;
 
     public BillingController(ListVentasUseCase listVentasUseCase,
                              BuscarVentasUseCase buscarVentasUseCase,
+                             GetVentaByIdUseCase getVentaByIdUseCase,
                              CreateVentaDirectaUseCase createVentaDirectaUseCase,
-                             CreateComprobanteSerieUseCase createSerieUseCase,
-                             ListComprobanteSeriesUseCase listSeriesUseCase,
-                             UpdateComprobanteSerieUseCase updateSerieUseCase,
                              ListMetodosCobroUseCase listMetodosCobroUseCase,
                              CreateMetodoCobroUseCase createMetodoCobroUseCase,
                              UpdateMetodoCobroUseCase updateMetodoCobroUseCase) {
         this.listVentasUseCase = listVentasUseCase;
         this.buscarVentasUseCase = buscarVentasUseCase;
+        this.getVentaByIdUseCase = getVentaByIdUseCase;
         this.createVentaDirectaUseCase = createVentaDirectaUseCase;
-        this.createSerieUseCase = createSerieUseCase;
-        this.listSeriesUseCase = listSeriesUseCase;
-        this.updateSerieUseCase = updateSerieUseCase;
         this.listMetodosCobroUseCase = listMetodosCobroUseCase;
         this.createMetodoCobroUseCase = createMetodoCobroUseCase;
         this.updateMetodoCobroUseCase = updateMetodoCobroUseCase;
@@ -84,32 +75,16 @@ public class BillingController {
             @RequestParam(required = false) String estado,
             @RequestParam(required = false) String tipoComprobante,
             @RequestParam(required = false) String serie,
-            @RequestParam(required = false) Boolean sunatEnviado) {
-        var filtro = new VentaFiltroDTO(desde, hasta, estado, tipoComprobante, serie, sunatEnviado);
+            @RequestParam(required = false) Boolean fiscalEnviado) {
+        var filtro = new VentaFiltroDTO(desde, hasta, estado, tipoComprobante, serie, fiscalEnviado);
         return ResponseEntity.ok(buscarVentasUseCase.execute(sucursalId, filtro));
     }
 
-    // ── Series de comprobante ──────────────────────────────────────────────────
-
-    @PostMapping("/series")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN', 'ENCARGADO')")
-    public ResponseEntity<ComprobanteSerieDTO> crearSerie(@PathVariable UUID sucursalId,
-                                                          @RequestBody ComprobanteSerieDTO request) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(createSerieUseCase.execute(sucursalId, request));
-    }
-
-    @GetMapping("/series")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','ENCARGADO')")
-    public ResponseEntity<List<ComprobanteSerieDTO>> listarSeries(@PathVariable UUID sucursalId) {
-        return ResponseEntity.ok(listSeriesUseCase.execute(sucursalId));
-    }
-
-    @PutMapping("/series/{serieId}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','ENCARGADO')")
-    public ResponseEntity<ComprobanteSerieDTO> actualizarSerie(@PathVariable UUID sucursalId,
-                                                               @PathVariable UUID serieId,
-                                                               @RequestBody ComprobanteSerieDTO request) {
-        return ResponseEntity.ok(updateSerieUseCase.execute(serieId, request));
+    @GetMapping("/ventas/{ventaId}")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','ENCARGADO','CAJERO')")
+    public ResponseEntity<VentaDTO> getVenta(@PathVariable UUID sucursalId,
+                                              @PathVariable UUID ventaId) {
+        return ResponseEntity.ok(getVentaByIdUseCase.execute(ventaId));
     }
 
     // ── Métodos de cobro ───────────────────────────────────────────────────────
@@ -121,7 +96,7 @@ public class BillingController {
     }
 
     @PostMapping("/metodos-cobro")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN', 'ENCARGADO')")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN','ADMIN','ENCARGADO')")
     public ResponseEntity<MetodoCobroDTO> crearMetodoCobro(@PathVariable UUID sucursalId,
                                                            @RequestBody MetodoCobroRequestDTO request) {
         return ResponseEntity.status(HttpStatus.CREATED)

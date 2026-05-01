@@ -1,9 +1,9 @@
-package com.audrey.soft.billing.infrastructure.persistence.adapters;
+package com.audrey.soft.fiscal.infrastructure.persistence.adapters;
 
-import com.audrey.soft.billing.domain.models.ComprobanteSerie;
-import com.audrey.soft.billing.domain.ports.ComprobanteSerieRepositoryPort;
-import com.audrey.soft.billing.infrastructure.persistence.entities.ComprobanteSerieEntity;
-import com.audrey.soft.billing.infrastructure.persistence.repositories.SpringDataComprobanteSerieRepository;
+import com.audrey.soft.fiscal.domain.models.ComprobanteSerie;
+import com.audrey.soft.fiscal.domain.ports.ComprobanteSerieRepositoryPort;
+import com.audrey.soft.fiscal.infrastructure.persistence.entities.ComprobanteSerieEntity;
+import com.audrey.soft.fiscal.infrastructure.persistence.repositories.SpringDataComprobanteSerieRepository;
 import com.audrey.soft.tenant.infrastructure.persistence.repositories.SpringDataSucursalRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Component;

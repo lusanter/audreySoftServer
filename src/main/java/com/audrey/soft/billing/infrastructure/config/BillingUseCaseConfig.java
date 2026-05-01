@@ -3,15 +3,15 @@ package com.audrey.soft.billing.infrastructure.config;
 import com.audrey.soft.billing.app.usecases.MetodoCobro.CreateMetodoCobroUseCase;
 import com.audrey.soft.billing.app.usecases.MetodoCobro.ListMetodosCobroUseCase;
 import com.audrey.soft.billing.app.usecases.MetodoCobro.UpdateMetodoCobroUseCase;
-import com.audrey.soft.billing.app.usecases.Serie.CreateComprobanteSerieUseCase;
-import com.audrey.soft.billing.app.usecases.Serie.ListComprobanteSeriesUseCase;
-import com.audrey.soft.billing.app.usecases.Serie.UpdateComprobanteSerieUseCase;
 import com.audrey.soft.billing.app.usecases.Venta.BuscarVentasUseCase;
 import com.audrey.soft.billing.app.usecases.Venta.CreateVentaDirectaUseCase;
+import com.audrey.soft.billing.app.usecases.Venta.GetVentaByIdUseCase;
 import com.audrey.soft.billing.app.usecases.Venta.ListVentasUseCase;
-import com.audrey.soft.billing.domain.ports.ComprobanteSerieRepositoryPort;
 import com.audrey.soft.billing.domain.ports.MetodoCobroRepositoryPort;
 import com.audrey.soft.billing.domain.ports.VentaRepositoryPort;
+import com.audrey.soft.fiscal.domain.ports.ComprobanteSerieRepositoryPort;
+import com.audrey.soft.fiscal.infrastructure.persistence.repositories.SpringDataFiscalConfigRepository;
+import com.audrey.soft.fiscal.infrastructure.persistence.repositories.SpringDataImpuestoTipoRepository;
 import com.audrey.soft.inventory.domain.ports.ProductoRepositoryPort;
 import com.audrey.soft.inventory.domain.ports.StockMovementRepositoryPort;
 import org.springframework.context.annotation.Bean;
@@ -29,28 +29,21 @@ public class BillingUseCaseConfig {
     public CreateVentaDirectaUseCase createVentaDirectaUseCase(VentaRepositoryPort ventaRepository,
                                                                 ComprobanteSerieRepositoryPort serieRepository,
                                                                 ProductoRepositoryPort productoRepository,
-                                                                StockMovementRepositoryPort stockMovementRepository) {
-        return new CreateVentaDirectaUseCase(ventaRepository, serieRepository, productoRepository, stockMovementRepository);
+                                                                StockMovementRepositoryPort stockMovementRepository,
+                                                                SpringDataFiscalConfigRepository fiscalConfigRepository,
+                                                                SpringDataImpuestoTipoRepository impuestoTipoRepository) {
+        return new CreateVentaDirectaUseCase(ventaRepository, serieRepository, productoRepository,
+                stockMovementRepository, fiscalConfigRepository, impuestoTipoRepository);
     }
 
     @Bean
-    public UpdateComprobanteSerieUseCase updateComprobanteSerieUseCase(ComprobanteSerieRepositoryPort serieRepository) {
-        return new UpdateComprobanteSerieUseCase(serieRepository);
+    public BuscarVentasUseCase buscarVentasUseCase(VentaRepositoryPort ventaRepository) {
+        return new BuscarVentasUseCase(ventaRepository);
     }
 
     @Bean
-    public com.audrey.soft.billing.app.usecases.Venta.BuscarVentasUseCase buscarVentasUseCase(VentaRepositoryPort ventaRepository) {
-        return new com.audrey.soft.billing.app.usecases.Venta.BuscarVentasUseCase(ventaRepository);
-    }
-
-    @Bean
-    public CreateComprobanteSerieUseCase createComprobanteSerieUseCase(ComprobanteSerieRepositoryPort serieRepository) {
-        return new CreateComprobanteSerieUseCase(serieRepository);
-    }
-
-    @Bean
-    public ListComprobanteSeriesUseCase listComprobanteSeriesUseCase(ComprobanteSerieRepositoryPort serieRepository) {
-        return new ListComprobanteSeriesUseCase(serieRepository);
+    public GetVentaByIdUseCase getVentaByIdUseCase(VentaRepositoryPort ventaRepository) {
+        return new GetVentaByIdUseCase(ventaRepository);
     }
 
     @Bean

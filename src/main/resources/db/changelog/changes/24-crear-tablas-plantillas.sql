@@ -1,3 +1,10 @@
+-- liquibase formatted sql
+
+-- changeset santer:24-crear-esquema-design
+CREATE SCHEMA IF NOT EXISTS design;
+-- rollback DROP SCHEMA design CASCADE;
+
+-- changeset santer:24-crear-tablas-plantillas
 -- ============================================================================
 -- Migración 24: Crear tablas para plantillas de diseño
 -- ============================================================================

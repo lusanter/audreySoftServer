@@ -1,5 +1,8 @@
 package com.audrey.soft.billing.infrastructure.persistence.entities;
 
+import com.audrey.soft.fiscal.infrastructure.persistence.entities.ComprobanteSerieEntity;
+import com.audrey.soft.fiscal.infrastructure.persistence.entities.VentaFiscalEntity;
+import com.audrey.soft.fiscal.infrastructure.persistence.entities.VentaImpuestoEntity;
 import com.audrey.soft.tenant.infrastructure.persistence.entities.SucursalEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -37,7 +40,7 @@ public class VentaEntity {
     @Builder.Default
     private String tipoComprobante = "NOTA_VENTA";
 
-    @Column(length = 4)
+    @Column(length = 20)
     private String serie;
 
     private Integer correlativo;
@@ -53,9 +56,13 @@ public class VentaEntity {
     @Builder.Default
     private BigDecimal descuento = BigDecimal.ZERO;
 
-    @Column(nullable = false, precision = 12, scale = 2)
+    @Column(name = "base_imponible", nullable = false, precision = 12, scale = 2)
     @Builder.Default
-    private BigDecimal igv = BigDecimal.ZERO;
+    private BigDecimal baseImponible = BigDecimal.ZERO;
+
+    @Column(name = "total_impuestos", nullable = false, precision = 12, scale = 2)
+    @Builder.Default
+    private BigDecimal totalImpuestos = BigDecimal.ZERO;
 
     @Column(nullable = false, precision = 12, scale = 2)
     @Builder.Default
@@ -65,15 +72,11 @@ public class VentaEntity {
     @Builder.Default
     private String estado = "COBRADA";
 
-    @Column(name = "sunat_enviado", nullable = false)
-    @Builder.Default
-    private boolean sunatEnviado = false;
+    @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<VentaImpuestoEntity> impuestos;
 
-    @Column(name = "sunat_aceptado")
-    private Boolean sunatAceptado;
-
-    @Column(name = "sunat_codigo_hash", length = 100)
-    private String sunatCodigoHash;
+    @OneToOne(mappedBy = "venta", fetch = FetchType.LAZY, optional = true)
+    private VentaFiscalEntity fiscal;
 
     @OneToMany(mappedBy = "venta", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<VentaItemEntity> items;

@@ -1,7 +1,9 @@
 package com.audrey.soft.restaurant.infrastructure.config;
 
-import com.audrey.soft.billing.domain.ports.ComprobanteSerieRepositoryPort;
 import com.audrey.soft.billing.domain.ports.VentaRepositoryPort;
+import com.audrey.soft.fiscal.domain.ports.ComprobanteSerieRepositoryPort;
+import com.audrey.soft.fiscal.infrastructure.persistence.repositories.SpringDataFiscalConfigRepository;
+import com.audrey.soft.fiscal.infrastructure.persistence.repositories.SpringDataImpuestoTipoRepository;
 import com.audrey.soft.inventory.domain.ports.ProductoRepositoryPort;
 import com.audrey.soft.inventory.domain.ports.StockMovementRepositoryPort;
 import com.audrey.soft.restaurant.app.mappers.ComandaMapper;
@@ -60,9 +62,12 @@ public class RestaurantUseCaseConfig {
                                                      ComprobanteSerieRepositoryPort serieRepository,
                                                      ProductoRepositoryPort productoRepository,
                                                      StockMovementRepositoryPort stockMovementRepository,
-                                                     ComandaMapper comandaMapper) {
+                                                     ComandaMapper comandaMapper,
+                                                     SpringDataFiscalConfigRepository fiscalConfigRepository,
+                                                     SpringDataImpuestoTipoRepository impuestoTipoRepository) {
         return new CerrarComandaUseCase(comandaRepository, mesaRepository, ventaRepository,
-                serieRepository, productoRepository, stockMovementRepository, comandaMapper);
+                serieRepository, productoRepository, stockMovementRepository, comandaMapper,
+                fiscalConfigRepository, impuestoTipoRepository);
     }
 
     @Bean

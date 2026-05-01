@@ -1,4 +1,4 @@
-package com.audrey.soft.billing.infrastructure.persistence.entities;
+package com.audrey.soft.fiscal.infrastructure.persistence.entities;
 
 import com.audrey.soft.tenant.infrastructure.persistence.entities.SucursalEntity;
 import jakarta.persistence.*;
